@@ -14,15 +14,21 @@ In order to parse the target language, there are a few steps involved. First, a 
 ---
 
 ### **75%**
-
+- Define our target language to be a subset of ??? which includes the following features:
+- Create a tokenizer and a parser which can accept code of our target language.
+- Create a compiler which can convert our target language into ???
 
 
 ### **100%**
-
+- Define our target language to be a subset of ??? which includes the following features:
+- Create a tokenizer and a parser which can accept code of our target language.
+- Create a compiler which can convert our target language into ???
 
 
 ### **125%**
-
+- Define our target language to be a subset of ??? which includes the following features:
+- Create a tokenizer and a parser which can accept code of our target language.
+- Create a compiler which can convert our target language into ???
 
 
 ## Specific Aims & Objectives
