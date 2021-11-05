@@ -1,4 +1,4 @@
-# Compiler for LANGAUGE in Rust
+# Compiler for MiniRacket in Rust
 Team Members: Abhay Patel & Mohammad Ghaemi
 
 ## Introduction
@@ -14,26 +14,51 @@ In order to parse the target language, there are a few steps involved. First, a 
 ---
 
 ### **75%**
-- Define our target language to be a subset of ??? which includes the following features:
-- Create a tokenizer and a parser which can accept code of our target language.
-- Create a compiler which can convert our target language into ???
+* Define our target language to be a subset of Racket which includes the following features:
+  * Support for integers, booleans, and characters
+  * Simple arithmetic operations such as incrementing, decrementing, and two integer addition and subtraction
+  * Conditional expressions (if-else statements)
+  * Support for variable bindings and lexical scoping
+* Create a tokenizer and a parser which can accept code of our target language.
+* Create a compiler which can convert our target language into x86 Assembly
+* Create a runtime system in C to run outputted assembly files
 
 
 ### **100%**
-- Define our target language to be a subset of ??? which includes the following features:
-- Create a tokenizer and a parser which can accept code of our target language.
-- Create a compiler which can convert our target language into ???
+* Define our target language to be a subset of Racket which includes the following features:
+  * Support for integers, booleans, and characters
+  * Simple arithmetic operations such as incrementing, decrementing, and two integer addition and subtraction
+  * Conditional expressions (if-else statements)
+  * Support for variable bindings and lexical scoping
+  * Support for lists and the binary `cons` operator for list construction
+  * Support for boxed values and the unary operators `box` and `unbox`
+  * Error checking to provide detailed error messages and prevent program crashing without explanation
+* Create a tokenizer and a parser which can accept code of our target language.
+* Create a compiler which can convert our target language into x86 Assembly
+* Create a runtime system in Rust to run outputted assembly files
 
 
 ### **125%**
-- Define our target language to be a subset of ??? which includes the following features:
-- Create a tokenizer and a parser which can accept code of our target language.
-- Create a compiler which can convert our target language into ???
+* Define our target language to be a subset of Racket which includes the following features:
+  * Support for integers, booleans, and characters
+  * Simple arithmetic operations such as incrementing, decrementing, and two integer addition and subtraction
+  * Conditional expressions (if-else statements)
+  * Support for variable bindings and lexical scoping
+  * Support for lists and the binary `cons` operator for list construction
+  * Support for boxed values and the unary operators `box` and `unbox`
+  * Error checking to provide detailed error messages and prevent program crashing without explanation
+  * Support for vectors and strings using the developed heap
+  * Support for top-level function declarations and function calls
+* Create a tokenizer and a parser which can accept code of our target language.
+* Create a compiler which can convert our target language into x86 Assembly
+* Create a runtime system in Rust to run outputted assembly files
 
 
 ## Specific Aims & Objectives
 ---
+With this project, we aim to learn about programming language paradigms, compiler structure, parsing techniques, and Rust language features by creating a compiler for a subset of the Racket programming language. We seek to expand our knowledge of compilers which we have gained through CMSC430 and apply the skills we have learned by creating a similar compiler in a different language.
 
+We will not be implementing very complex processes such as garbage collection in our heap (as we have not learned how to do this in CMSC430), but we will specifically try to implement each feature defined in the above stated goals and create a somewhat robust error checker for improved user experience.
 ## Cited References
 ---
 
