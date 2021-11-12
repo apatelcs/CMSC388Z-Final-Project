@@ -1,6 +1,7 @@
 // Defines the Abstract Syntax Tree for MiniRacket
 
-// type Expr = Int (i32)
-pub struct Int {
-    pub val: i32
+// type Expr =
+// | Int of i32
+pub enum Expr {
+    Int(i32)
 }
