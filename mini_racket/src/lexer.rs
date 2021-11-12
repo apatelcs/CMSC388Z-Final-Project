@@ -6,7 +6,7 @@ pub mod lexer {
     use Tokens::*;
     use crate::errors::errors::TokError;
 
-    pub struct TokenVec(Vec<Tokens>);
+    pub struct TokenVec(pub Vec<Tokens>);
 
     
     impl std::fmt::Display for TokenVec {

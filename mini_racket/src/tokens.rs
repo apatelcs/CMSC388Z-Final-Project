@@ -1,6 +1,6 @@
 pub mod tokens {
 
-    #[derive(Debug)]
+    #[derive(Debug, Clone, Copy)]
     pub enum Tokens {
         LParen,
         RParen,
