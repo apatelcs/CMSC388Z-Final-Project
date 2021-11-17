@@ -5,7 +5,8 @@ mod errors;
 mod parser;
 
 use lexer::lexer::tokenize;
-use parser::parser::parse;
+use parser::parser::parse_literal;
+
 
 fn main() {
     println!("TOKENIZE TEST");
@@ -32,7 +33,7 @@ fn main() {
         Err(e) => println!("{}", e),
         Ok(mut ok) => {
             println!("{}", ok);
-            let parsed = parse(&mut ok);
+            let parsed = parse_literal(&mut ok);
             match parsed {
                 Err(e) => println!("{}", e),
                 Ok(_) => println!("Parsed :)")
@@ -44,7 +45,7 @@ fn main() {
         Err(e) => println!("{}", e),
         Ok(mut ok) => {
             println!("{}", ok);
-            let parsed = parse(&mut ok);
+            let parsed = parse_literal(&mut ok);
             match parsed {
                 Err(e) => println!("{}", e),
                 Ok(_) => println!("Parsed :)")
