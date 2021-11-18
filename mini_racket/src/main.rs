@@ -3,7 +3,9 @@ mod tokens;
 mod lexer;
 mod errors;
 mod parser;
+mod a86;
 
+use a86::a86::*;
 use lexer::lexer::tokenize;
 use parser::parser::parse;
 
@@ -56,4 +58,15 @@ fn main() {
             }
         }
     }
+    
+    let tmp = Instruct::Mov(String::from("rax"), 42.to_string());
+    let tmp2 = Instruct::Ret;
+    let tmp3 = Instruct::Label(String::from("entry"));
+    let tmp4 = Instruct::Global(String::from("entry"));
+
+    println!("{}", tmp.to_string());
+    println!("{}", tmp2.to_string());
+    println!("{}", tmp3.to_string());
+    println!("{}", tmp4.to_string());
+
 }
