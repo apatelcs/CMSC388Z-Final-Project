@@ -1,38 +1,40 @@
 pub mod parser {
     use std::result::Result;
-    use crate::tokens::tokens::*;
-    use Tokens::*;
     use crate::ast::ast::*;
+    use crate::tokens::tokens::*;
     use Expr::*;
-    use crate::lexer::lexer::*;
+    use Token::*;
+   
+    // Returns the head token of the token list
+    fn lookahead(toks: &mut TokenVec) -> Result<Token, &'static str> {
+        match toks.lst.as_slice() {
+            [] => Err("No more tokens!"),
+            [first, ..] => Ok(*first)
+        } 
+    }
+    
+    // Returns the tail of the token list if the head token matches the input token
+    fn match_token(toks: &mut TokenVec, tok: Token) -> Result<TokenVec, &'static str> {
+        match toks.lst.as_slice() {
+            [] => Err("No more tokens!"),
+            [first, ..] if *first == tok => Ok(TokenVec { lst: toks.lst[1..].to_vec() }),
+            _ => Err("Tokens did not match!")
+        }
+    }
 
-    // S-Expr -> Expr
-    pub fn parse(s: &mut TokenVec) -> Result<Expr, &'static str> {
-        match lookahead(s) {
-            Some(TInt(i)) => {
-                let rest = pop_tok_list(s);
+    // Converts list of tokens into an expression in our defined AST
+    pub fn parse(mut toks: &mut TokenVec) -> Result<(TokenVec, Expr), &'static str> {
+        match lookahead(&mut toks) {
+            Ok(TInt(i)) => {
+                let rest = match_token(&mut toks, TInt(i));
                 match rest {
-                    None => Ok(Int(i)),
-                    _ => Err("Literal reached and still has tokens")
+                    Ok(tvec) => Ok((tvec, Int(i))),
+                    Err(err) => Err(err)
                 }
-            },
-            None => Err("No tokens to parse!"),
-            _ => Err("Parse error!")
+            } 
+            Ok(_) => Err("Unexpected token!"),
+            Err(err) => Err(err)
         }
     }
 
-    pub fn lookahead(s: &mut TokenVec) -> Option<Tokens> {
-        if s.0.len() != 0 {
-            return Some(s.0[0]);
-        }
-        return None;
-    }
-
-    pub fn pop_tok_list(s: &mut TokenVec) -> Option<TokenVec> {
-        if s.0[1..].len() == 0 {
-            return None;
-        }
-
-        Some(TokenVec(s.0[1..].to_vec()))
-    }
 }

@@ -1,3 +1,5 @@
+// Defines the errors to be thrown throughout the project
+
 pub mod errors {
 
     pub struct TokError {

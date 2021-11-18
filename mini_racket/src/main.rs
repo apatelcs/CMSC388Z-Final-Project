@@ -5,9 +5,9 @@ mod errors;
 mod parser;
 
 use lexer::lexer::tokenize;
-use parser::parser::parse_literal;
+use parser::parser::parse;
 
-
+// Wrote simple tests to see if lexer/parser are working
 fn main() {
     println!("TOKENIZE TEST");
 
@@ -29,11 +29,13 @@ fn main() {
     let good = tokenize(String::from("42"));
     let bad = tokenize(String::from("(42)"));
 
+    println!("Parsing the program: 42");
+
     match good {
         Err(e) => println!("{}", e),
         Ok(mut ok) => {
             println!("{}", ok);
-            let parsed = parse_literal(&mut ok);
+            let parsed = parse(&mut ok);
             match parsed {
                 Err(e) => println!("{}", e),
                 Ok(_) => println!("Parsed :)")
@@ -41,11 +43,13 @@ fn main() {
         }
     }
 
+    println!("Parsing the program: (42)");
+
     match bad {
         Err(e) => println!("{}", e),
         Ok(mut ok) => {
             println!("{}", ok);
-            let parsed = parse_literal(&mut ok);
+            let parsed = parse(&mut ok);
             match parsed {
                 Err(e) => println!("{}", e),
                 Ok(_) => println!("Parsed :)")

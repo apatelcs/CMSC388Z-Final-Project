@@ -3,32 +3,16 @@ pub mod lexer {
     use regex::Regex;
     use lazy_static::lazy_static;
     use crate::tokens::tokens::*;
-    use Tokens::*;
+    use Token::*;
     use crate::errors::errors::TokError;
-
-    pub struct TokenVec(pub Vec<Tokens>);
-
-    
-    impl std::fmt::Display for TokenVec {
-        fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-            let mut comma_separated = String::new();
-
-            for num in &self.0[0..self.0.len() - 1] {
-                comma_separated.push_str(&num.to_string());
-                comma_separated.push_str(", ");
-            }
-
-            comma_separated.push_str(&self.0[self.0.len() - 1].to_string());
-            write!(f, "{}", comma_separated)
-        }
-    }
 
     lazy_static! {
         static ref INT_RE: Regex = Regex::new(r"^[0-9]+").unwrap();
     }
     
+    // Takes raw string and converts to a list of tokens
     pub fn tokenize(text: String) -> Result<TokenVec, TokError> {
-        let mut toks = Vec::<Tokens>::new();
+        let mut toks = Vec::<Token>::new();
         let mut pos:usize = 0;        
 
         while pos < text.len(){
@@ -53,6 +37,6 @@ pub mod lexer {
             }
         }
 
-        Ok(TokenVec(toks))
+        Ok(TokenVec { lst: toks })
     }
 }
