@@ -35,9 +35,11 @@ We also do not yet have a runtime system for our programming language. We will b
 
 ## Unexpected obstacles
 ---
+We have not run into many obstacles yet. Much of the work we have completed required us to revisit some concepts we learned in CMSC330 (i.e. tokenizing raw text and creating a recursive descent parser). We were able to reference the leture notes from CMSC388Z along with the extensive Rust documentation to implement our base compiler system, and have not yet run into any major issues. The most difficult aspect of this project seems to be interfacing with assembly, and we are in the process of resolving this by creating enums and structures to interface with x86 assembly.
 
 ## Which goal we expect to meet
 ---
+We definitely expect to meet our 75% goal, and likely will be able to reach our 100% goal without much issue. Once we get our base language (with only integer literals) to both compile and run (using CMSC430's runtime system), we simply need to add features to the language and will not have to make major structural changes to our code. We hope to achieve our 125% goal, however will primarily focus on achieving our 100% goal. We anticipate the most challenging aspects to be the x86 interfacing as well as impelenting the runtime system using Rust.
 
 ## Link to project repository
 ---
