@@ -4,69 +4,32 @@ mod lexer;
 mod errors;
 mod parser;
 mod a86;
+mod compiler;
 
-use a86::a86::*;
+use std::env;
+use std::fs;
+use std::path::Path;
 use lexer::lexer::tokenize;
 use parser::parser::parse;
+use compiler::compiler::compile;
 
 // Wrote simple tests to see if lexer/parser are working
 fn main() {
-    println!("TOKENIZE TEST");
-
-    let v_good = tokenize(String::from("(((123)  123))"));
-    let v_bad = tokenize(String::from("(((123)a123))"));
-
-    match v_good {
-        Err(e) => println!("{}", e),
-        Ok(ok) => println!("{}", ok)
-    }
-
-    match v_bad {
-        Err(e) => println!("{}", e),
-        Ok(ok) => println!("{}", ok)
-    }
-    
-    println!("---------------------------------------");
-    println!("PARSE TEST");
-    let good = tokenize(String::from("42"));
-    let bad = tokenize(String::from("(42)"));
-
-    println!("Parsing the program: 42");
-
-    match good {
-        Err(e) => println!("{}", e),
-        Ok(mut ok) => {
-            println!("{}", ok);
-            let parsed = parse(&mut ok);
-            match parsed {
-                Err(e) => println!("{}", e),
-                Ok(_) => println!("Parsed :)")
-            }
-        }
-    }
-
-    println!("Parsing the program: (42)");
-
-    match bad {
-        Err(e) => println!("{}", e),
-        Ok(mut ok) => {
-            println!("{}", ok);
-            let parsed = parse(&mut ok);
-            match parsed {
-                Err(e) => println!("{}", e),
-                Ok(_) => println!("Parsed :)")
-            }
-        }
-    }
-    
-    let tmp = Instruct::Mov(String::from("rax"), 42.to_string());
-    let tmp2 = Instruct::Ret;
-    let tmp3 = Instruct::Label(String::from("entry"));
-    let tmp4 = Instruct::Global(String::from("entry"));
-
-    println!("{}", tmp.to_string());
-    println!("{}", tmp2.to_string());
-    println!("{}", tmp3.to_string());
-    println!("{}", tmp4.to_string());
-
+    let mut args = env::args();
+    let file = &args.nth(1).unwrap();
+    let p = Path::new(file);
+    let file_stem = p.file_stem().unwrap().to_str().unwrap();
+    let path = format!("./{}.rkt", file_stem);
+    let source = fs::read_to_string(path).expect("Unable to read file");
+    let tokens = tokenize(source);
+    let parse = match tokens {
+        Ok(mut toks) => parse(&mut toks),
+        Err(err) => panic!("{}", err)
+    };
+    let asm = match parse {
+        Ok((_,expr)) => compile(expr),
+        Err(err) => panic!("{}", err)
+    };
+    let write_path = format!("./{}.s", file_stem);
+    fs::write(write_path, asm.to_string()).expect("Unable to write file");
 }
