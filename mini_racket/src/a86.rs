@@ -1,5 +1,16 @@
 pub mod a86 {
 
+    static OS_TYPE: &str = std::env::consts::OS;
+
+    fn get_label(label: &String) -> String {
+        if OS_TYPE == "macos" {
+            format!("_{}",label)
+        }
+        else {
+            label.to_string()
+        }
+    }
+
     pub trait Asm: std::fmt::Display { 
         fn to_asm(self) -> Box<dyn Asm>;
     }
@@ -48,8 +59,8 @@ pub mod a86 {
     impl std::fmt::Display for Instruct {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             let text = match &self {
-                Instruct::Global(lbl) => format!("\tglobal {}", lbl),
-                Instruct::Label(lbl) => format!("{}:", lbl),
+                Instruct::Global(lbl) => format!("\tglobal {}", get_label(lbl)),
+                Instruct::Label(lbl) => format!("{}:", get_label(lbl)),
                 Instruct::Ret => String::from("\tret"),
                 Instruct::Mov(d, s) => format!("\tmov {}, {}", d.value(), s.value())
             };
@@ -105,7 +116,8 @@ pub mod a86 {
     impl std::fmt::Display for Prog {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             let mut prog = String::new();
-            prog.push_str("\tglobal entry\n\tdefault rel\n\tsection .text\n");
+            let start = format!("\tglobal {}\n\tdefault rel\n\tsection .text\n", get_label(&String::from("entry"))).to_string();
+            prog.push_str(&start);
             for instruct in &self.lst[0..self.lst.len() - 1] {
                 prog.push_str(&instruct.to_string());
                 prog.push_str("\n");
