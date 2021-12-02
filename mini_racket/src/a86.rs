@@ -21,6 +21,8 @@ pub mod a86 {
         Global(String),
         Label(String),
         Ret,
+        Add(Value, Value),
+        Sub(Value, Value)
     }
 
     impl Asm for Instruct {
@@ -62,7 +64,9 @@ pub mod a86 {
                 Instruct::Global(lbl) => format!("\tglobal {}", get_label(lbl)),
                 Instruct::Label(lbl) => format!("{}:", get_label(lbl)),
                 Instruct::Ret => String::from("\tret"),
-                Instruct::Mov(d, s) => format!("\tmov {}, {}", d.value(), s.value())
+                Instruct::Mov(d, s) => format!("\tmov {}, {}", d.value(), s.value()),
+                Instruct::Add(d, s) => format!("\tadd {}, {}", d.value(), s.value()),
+                Instruct::Sub(d, s) => format!("\tsub {}, {}", d.value(), s.value())
             };
 
             write!(f, "{}", text)

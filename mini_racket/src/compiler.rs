@@ -24,6 +24,19 @@ pub mod compiler {
         let seq= Seq::new(Vec::from([
             match e {
                 Int(i) => Mov(Rax, Im(i)).to_asm(),
+                Prim1(op, e) => compile_prim1(op, *e)
+            }
+        ]));
+
+        Box::new(seq)
+    }
+
+    fn compile_prim1(op: String, e: Expr) -> Box<dyn Asm> {
+        let seq = Seq::new(Vec::from([
+            compile_e(e),
+            match op.as_str() {
+                "add1" => Add(Rax, Im(1)).to_asm(),
+                _ => Sub(Rax, Im(1)).to_asm(),
             }
         ]));
 

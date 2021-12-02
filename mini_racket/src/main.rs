@@ -15,6 +15,19 @@ use compiler::compiler::compile;
 
 // Wrote simple tests to see if lexer/parser are working
 fn main() {
+    // let code = "(add1 (add1 (sub1 42)))";
+    // let tokens = tokenize(String::from(code));
+    // match tokens {
+    //     Ok(mut toks) => {
+    //         println!("Tokens are: {}", toks);
+    //         let parsed = parse(&mut toks);
+    //         match parsed {
+    //             Ok((v, e)) => println!("Expression: {}", e),
+    //             Err(err) => println!("{}", err)
+    //         }
+    //     },
+    //     Err(err) => println!("{}", err)
+    // }
     let mut args = env::args();
     let file = &args.nth(1).unwrap();
     let p = Path::new(file);

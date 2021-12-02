@@ -1,13 +1,14 @@
 pub mod tokens {
 
     // Token representations of our source language
-    #[derive(Debug, Clone, Copy, PartialEq)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum Token {
         LParen,
         RParen,
-        TInt(i32)
+        TInt(i32),
+        TOp1(String),
     }
-    
+
     // Helpful display implementation for tokens
     impl std::fmt::Display for Token {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {

@@ -8,6 +8,7 @@ pub mod lexer {
 
     lazy_static! {
         static ref INT_RE: Regex = Regex::new(r"^[0-9]+").unwrap();
+        static ref OP1_RE: Regex = Regex::new(r"^add1 |^sub1 ").unwrap();
     }
     
     // Takes raw string and converts to a list of tokens
@@ -31,6 +32,11 @@ pub mod lexer {
                 let v = i_match.as_str().parse::<i32>().unwrap();
                 toks.push(TInt(v));
                 pos += i_match.end()
+            }
+            else if let Some(op1_match) = OP1_RE.find(&text[pos..]) { // Matches to op1
+                let op = op1_match.as_str().clone().trim_end();
+                toks.push(TOp1(String::from(op)));
+                pos += op1_match.end()
             }
             else {
                 return Err(TokError::new("Could not parse", pos))

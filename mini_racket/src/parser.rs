@@ -3,13 +3,13 @@ pub mod parser {
     use crate::ast::ast::*;
     use crate::tokens::tokens::*;
     use Expr::*;
-    use Token::*;
+    use Token::*;   
    
     // Returns the head token of the token list
     fn lookahead(toks: &mut TokenVec) -> Result<Token, &'static str> {
         match toks.lst.as_slice() {
             [] => Err("No more tokens!"),
-            [first, ..] => Ok(*first)
+            [first, ..] => Ok(first.clone())
         } 
     }
     
@@ -31,10 +31,52 @@ pub mod parser {
                     Ok(tvec) => Ok((tvec, Int(i))),
                     Err(err) => Err(err)
                 }
-            } 
+            },
+            Ok(LParen) => {
+                let rest = match_token(&mut toks, LParen);
+                match rest {
+                    Ok(mut tvec) => {
+                        match parse_prim(&mut tvec) {
+                            Ok((mut vec, e)) => {
+                                match lookahead(&mut vec) {
+                                    Ok(RParen) => {
+                                        let rest2 = match_token(&mut vec, RParen);
+                                        match rest2 {
+                                            Ok(vec2) => Ok((vec2, e)),
+                                            Err(err) => Err(err)
+                                        }
+                                    },
+                                    Ok(_) => Err("Unbalanced parenthesis!"),
+                                    Err(err) => Err(err)
+                                }
+                            },
+                            Err(err) => Err(err)
+                        }
+                    },
+                    Err(err) => Err(err)
+                }
+            },
             Ok(_) => Err("Unexpected token!"),
             Err(err) => Err(err)
         }
     }
 
+    fn parse_prim(mut toks: &mut TokenVec) -> Result<(TokenVec, Expr), &'static str> {
+        match lookahead(&mut toks) {
+            Ok(TOp1(op)) => {
+                let rest = match_token(&mut toks, TOp1(op.clone()));
+                match rest {
+                    Ok(mut tvec) => {
+                        match parse(&mut tvec) {
+                            Ok((vec, e)) => Ok((vec, Prim1(op.clone(), Box::new(e)))),
+                            Err(err) => Err(err)
+                        }
+                    },
+                    Err(err) => Err(err)
+                }
+            },
+            Ok(_) => Err("Unexpected token!"),
+            Err(err) => Err(err)
+        }
+    }
 }
