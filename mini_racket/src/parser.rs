@@ -32,11 +32,18 @@ pub mod parser {
                     Err(err) => Err(err)
                 }
             },
+            Ok(TBool(b)) => {
+                let rest = match_token(&mut toks, TBool(b));
+                match rest {
+                    Ok(tvec) => Ok((tvec, Bool(b))),
+                    Err(err) => Err(err)
+                }
+            },
             Ok(LParen) => {
                 let rest = match_token(&mut toks, LParen);
                 match rest {
                     Ok(mut tvec) => {
-                        match parse_prim(&mut tvec) {
+                        match parse_non_literal(&mut tvec) {
                             Ok((mut vec, e)) => {
                                 match lookahead(&mut vec) {
                                     Ok(RParen) => {
@@ -61,8 +68,30 @@ pub mod parser {
         }
     }
 
-    fn parse_prim(mut toks: &mut TokenVec) -> Result<(TokenVec, Expr), &'static str> {
+    fn parse_non_literal(mut toks: &mut TokenVec) -> Result<(TokenVec, Expr), &'static str> {
         match lookahead(&mut toks) {
+            Ok(TIf) => {
+                let rest = match_token(&mut toks, TIf);
+                match rest {
+                    Ok(mut tvec1) => {
+                        match parse(&mut tvec1) {
+                            Ok((mut tvec2, e1)) => {
+                                match parse(&mut tvec2) {
+                                    Ok((mut tvec3, e2)) => {
+                                        match parse(&mut tvec3) {
+                                            Ok((vec, e3)) => Ok((vec, If(Box::new(e1), Box::new(e2), Box::new(e3)))),
+                                            Err(err) => Err(err)
+                                        }
+                                    },
+                                    Err(err) => Err(err)
+                                }
+                            },
+                            Err(err) => Err(err)
+                        }
+                    },
+                    Err(err) => Err(err)
+                }
+            },
             Ok(TOp1(op)) => {
                 let rest = match_token(&mut toks, TOp1(op.clone()));
                 match rest {
@@ -75,6 +104,23 @@ pub mod parser {
                     Err(err) => Err(err)
                 }
             },
+            // Ok(TOp2(op)) => {
+            //     let rest = match_token(&mut toks, TOp2(op.clone()));
+            //     match rest {
+            //         Ok(mut tvec1) => {
+            //             match parse(&mut tvec1) {
+            //                 Ok((mut tvec2, e1)) => {
+            //                     match parse(&mut tvec2) {
+            //                         Ok((vec, e2)) => Ok((vec, Prim2(op.clone(), Box::new(e1), Box::new(e2)))),
+            //                         Err(err) => Err(err)
+            //                     }
+            //                 },
+            //                 Err(err) => Err(err)
+            //             }
+            //         },
+            //         Err(err) => Err(err)
+            //     }
+            // },
             Ok(_) => Err("Unexpected token!"),
             Err(err) => Err(err)
         }

@@ -5,6 +5,7 @@ mod errors;
 mod parser;
 mod a86;
 mod compiler;
+mod types;
 
 use std::env;
 use std::fs;

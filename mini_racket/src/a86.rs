@@ -2,9 +2,9 @@ pub mod a86 {
 
     static OS_TYPE: &str = std::env::consts::OS;
 
-    fn get_label(label: &String) -> String {
-        if OS_TYPE == "macos" {
-            format!("_{}",label)
+    fn format_label(label: &String) -> String {
+        if OS_TYPE == "macos" && !(label.starts_with("_")) {
+            format!("_{}", label)
         }
         else {
             label.to_string()
@@ -22,7 +22,15 @@ pub mod a86 {
         Label(String),
         Ret,
         Add(Value, Value),
-        Sub(Value, Value)
+        Sub(Value, Value),
+        Cmp(Value, Value),
+        Jmp(String),
+        Je(String),
+        Jne(String),
+        Jl(String),
+        Jle(String),
+        Jg(String),
+        Jge(String)
     }
 
     impl Asm for Instruct {
@@ -61,12 +69,20 @@ pub mod a86 {
     impl std::fmt::Display for Instruct {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             let text = match &self {
-                Instruct::Global(lbl) => format!("\tglobal {}", get_label(lbl)),
-                Instruct::Label(lbl) => format!("{}:", get_label(lbl)),
+                Instruct::Global(lbl) => format!("\tglobal {}", format_label(lbl)),
+                Instruct::Label(lbl) => format!("{}:", format_label(lbl)),
                 Instruct::Ret => String::from("\tret"),
                 Instruct::Mov(d, s) => format!("\tmov {}, {}", d.value(), s.value()),
                 Instruct::Add(d, s) => format!("\tadd {}, {}", d.value(), s.value()),
-                Instruct::Sub(d, s) => format!("\tsub {}, {}", d.value(), s.value())
+                Instruct::Sub(d, s) => format!("\tsub {}, {}", d.value(), s.value()),
+                Instruct::Cmp(a, b) => format!("\tcmp {}, {}", a.value(), b.value()),
+                Instruct::Jmp(l) => format!("\tjmp {}", format_label(l)),
+                Instruct::Je(l) => format!("\tje {}", format_label(l)),
+                Instruct::Jne(l) => format!("\tjne {}", format_label(l)),
+                Instruct::Jl(l) => format!("\tjl {}", format_label(l)),
+                Instruct::Jle(l) => format!("\tjle {}", format_label(l)),
+                Instruct::Jg(l) => format!("\tjg {}", format_label(l)),
+                Instruct::Jge(l) => format!("\tjge {}", format_label(l))
             };
 
             write!(f, "{}", text)
@@ -120,7 +136,7 @@ pub mod a86 {
     impl std::fmt::Display for Prog {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             let mut prog = String::new();
-            let start = format!("\tglobal {}\n\tdefault rel\n\tsection .text\n", get_label(&String::from("entry"))).to_string();
+            let start = format!("\tglobal {}\n\tdefault rel\n\tsection .text\n", format_label(&String::from("entry"))).to_string();
             prog.push_str(&start);
             for instruct in &self.lst[0..self.lst.len() - 1] {
                 prog.push_str(&instruct.to_string());
