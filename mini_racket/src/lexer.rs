@@ -16,7 +16,14 @@ pub mod lexer {
     // Takes raw string and converts to a list of tokens
     pub fn tokenize(text: String) -> Result<TokenVec, TokError> {
         let mut toks = Vec::<Token>::new();
-        let mut pos:usize = 0;        
+        let mut pos:usize = 0;
+        
+        if &text[0..12] == "#lang racket" {
+            pos += 12;
+        }
+        else {
+            return Err(TokError::new("Must specify '#lang racket'", pos));
+        }
 
         while pos < text.len(){
             if "\n\t ".contains(&text[pos..(pos + 1)]) {

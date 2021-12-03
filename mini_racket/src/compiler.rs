@@ -1,4 +1,5 @@
 pub mod compiler {
+    use uuid::Uuid;
     use crate::ast::ast::*;
     use crate::a86::a86::*;
     use crate::types::types::*;
@@ -36,17 +37,17 @@ pub mod compiler {
     }
 
     fn compile_if(e1: Expr, e2: Expr, e3: Expr) -> Box<dyn Asm> {
-        let l1 = "if1";
-        let l2 = "if2";
+        let l1 = Uuid::new_v4().to_simple().to_string();
+        let l2 = Uuid::new_v4().to_simple().to_string();
         let seq = Seq::new(Vec::from([
             compile_e(e1),
             Cmp(Rax, Im(VAL_FALSE)).to_asm(),
-            Je(l1.to_string()).to_asm(),
+            Je(l1.clone()).to_asm(),
             compile_e(e2),
-            Jmp(l2.to_string()).to_asm(),
-            Label(l1.to_string()).to_asm(),
+            Jmp(l2.clone()).to_asm(),
+            Label(l1).to_asm(),
             compile_e(e3),
-            Label(l2.to_string()).to_asm()
+            Label(l2).to_asm()
         ]));
 
         Box::new(seq)

@@ -1,1 +1,2 @@
-(if #t 1 2)
+#lang racket
+(if (if #t #t #f) 42 44)
