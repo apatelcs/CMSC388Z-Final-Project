@@ -22,7 +22,7 @@ pub mod lexer {
             pos += 12;
         }
         else {
-            return Err(TokError::new("Must specify '#lang racket'", pos));
+            return Err(TokError::new("Must specify '#lang racket'", pos))
         }
 
         while pos < text.len(){

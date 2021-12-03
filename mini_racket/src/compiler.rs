@@ -57,8 +57,8 @@ pub mod compiler {
         let seq = Seq::new(Vec::from([
             compile_e(e),
             match op.as_str() {
-                "add1" => Add(Rax, Im(1)).to_asm(),
-                _ => Sub(Rax, Im(1)).to_asm()
+                "add1" => Add(Rax, Im(int_to_bits(1))).to_asm(),
+                _ => Sub(Rax, Im(int_to_bits(1))).to_asm()
             }
         ]));
 
