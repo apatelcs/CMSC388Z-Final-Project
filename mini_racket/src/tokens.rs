@@ -9,7 +9,7 @@ pub mod tokens {
         TBool(bool),
         TIf,
         TOp1(String),
-        // TOp2(String)
+        TOp2(String)
     }
 
     // Helpful display implementation for tokens

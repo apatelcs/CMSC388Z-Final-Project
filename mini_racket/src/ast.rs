@@ -8,7 +8,7 @@ pub mod ast {
         Bool(bool),
         If(Box<Expr>, Box<Expr>, Box<Expr>),
         Prim1(String, Box<Expr>),
-        // Prim2(String, Box<Expr>, Box<Expr>)
+        Prim2(String, Box<Expr>, Box<Expr>)
     }
 
     // Helpful display implementation for expressions

@@ -1,2 +1,4 @@
 #lang racket
-(if (if #t #t #f) (add1 0) 44)
+(if #f
+    #t
+    (+ 2 (sub1 (- 5 8))))

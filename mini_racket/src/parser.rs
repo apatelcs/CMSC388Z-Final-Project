@@ -104,23 +104,23 @@ pub mod parser {
                     Err(err) => Err(err)
                 }
             },
-            // Ok(TOp2(op)) => {
-            //     let rest = match_token(&mut toks, TOp2(op.clone()));
-            //     match rest {
-            //         Ok(mut tvec1) => {
-            //             match parse(&mut tvec1) {
-            //                 Ok((mut tvec2, e1)) => {
-            //                     match parse(&mut tvec2) {
-            //                         Ok((vec, e2)) => Ok((vec, Prim2(op.clone(), Box::new(e1), Box::new(e2)))),
-            //                         Err(err) => Err(err)
-            //                     }
-            //                 },
-            //                 Err(err) => Err(err)
-            //             }
-            //         },
-            //         Err(err) => Err(err)
-            //     }
-            // },
+            Ok(TOp2(op)) => {
+                let rest = match_token(&mut toks, TOp2(op.clone()));
+                match rest {
+                    Ok(mut tvec1) => {
+                        match parse(&mut tvec1) {
+                            Ok((mut tvec2, e1)) => {
+                                match parse(&mut tvec2) {
+                                    Ok((vec, e2)) => Ok((vec, Prim2(op.clone(), Box::new(e1), Box::new(e2)))),
+                                    Err(err) => Err(err)
+                                }
+                            },
+                            Err(err) => Err(err)
+                        }
+                    },
+                    Err(err) => Err(err)
+                }
+            },
             Ok(_) => Err("Unexpected token!"),
             Err(err) => Err(err)
         }

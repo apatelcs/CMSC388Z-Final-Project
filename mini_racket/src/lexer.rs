@@ -10,7 +10,7 @@ pub mod lexer {
         static ref INT_RE: Regex = Regex::new(r"^[0-9]+").unwrap();
         static ref BOOL_RE: Regex = Regex::new(r"^#t|^#f").unwrap();
         static ref OP1_RE: Regex = Regex::new(r"^add1 |^sub1 ").unwrap();
-        // static ref OP2_RE: Regex = Regex::new(r"^\+ |^- ").unwrap();
+        static ref OP2_RE: Regex = Regex::new(r"^\+ |^- ").unwrap();
     }
     
     // Takes raw string and converts to a list of tokens
@@ -59,11 +59,11 @@ pub mod lexer {
                 toks.push(TOp1(String::from(op)));
                 pos += op1_match.end()
             }
-            // else if let Some(op2_match) = OP2_RE.find(&text[pos..]) {
-            //     let op = op2_match.as_str().clone().trim_end();
-            //     toks.push(TOp2(String::from(op)));
-            //     pos += op2_match.end()
-            // }
+            else if let Some(op2_match) = OP2_RE.find(&text[pos..]) {
+                let op = op2_match.as_str().clone().trim_end();
+                toks.push(TOp2(String::from(op)));
+                pos += op2_match.end()
+            }
             else {
                 return Err(TokError::new("Could not parse", pos))
             }

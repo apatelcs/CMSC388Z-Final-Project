@@ -30,7 +30,9 @@ pub mod a86 {
         Jl(String),
         Jle(String),
         Jg(String),
-        Jge(String)
+        Jge(String),
+        Pop(Value),
+        Push(Value)
     }
 
     impl Asm for Instruct {
@@ -41,6 +43,7 @@ pub mod a86 {
 
     pub enum Value {
         Im(i32),
+        Offset(Box<Value>, i32),
         Rax,
         Rbx,
         R8,
@@ -52,8 +55,9 @@ pub mod a86 {
 
     impl Value {
         fn value(&self) -> String {
-            match *self {
+            match &*self {
                 Value::Im(i) => i.to_string(),
+                Value::Offset(r, i) => format!("[{} + {}]", r.value(), i.to_string()),
                 Value::Rax => String::from("rax"),
                 Value::Rbx => String::from("rbx"),
                 Value::R8 => String::from("r8"),
@@ -82,7 +86,9 @@ pub mod a86 {
                 Instruct::Jl(l) => format!("\tjl {}", format_label(l)),
                 Instruct::Jle(l) => format!("\tjle {}", format_label(l)),
                 Instruct::Jg(l) => format!("\tjg {}", format_label(l)),
-                Instruct::Jge(l) => format!("\tjge {}", format_label(l))
+                Instruct::Jge(l) => format!("\tjge {}", format_label(l)),
+                Instruct::Pop(r) => format!("\tpop {}", r.value()),
+                Instruct::Push(r) => format!("\tpush {}", r.value()),
             };
 
             write!(f, "{}", text)
