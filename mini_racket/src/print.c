@@ -1,3 +1,5 @@
+// Borrowed from UMD's CMSC430 runtime environment
+
 #include <stdio.h>
 #include <inttypes.h>
 #include "values.h"
