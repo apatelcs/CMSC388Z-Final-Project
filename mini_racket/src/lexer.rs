@@ -11,10 +11,11 @@ pub mod lexer {
         static ref BOOL_RE: Regex = Regex::new(r"^#t|^#f").unwrap();
         static ref OP1_RE: Regex = Regex::new(r"^add1 |^sub1 ").unwrap();
         static ref OP2_RE: Regex = Regex::new(r"^\+ |^- ").unwrap();
+        static ref ID_RE: Regex = Regex::new(r"^[^\s\(\)]+").unwrap();
     }
     
     // Takes raw string and converts to a list of tokens
-    pub fn tokenize(text: String) -> Result<TokenVec, TokError> {
+    pub fn tokenize(text: &'static str) -> Result<TokenVec, TokError> {
         let mut toks = Vec::<Token>::new();
         let mut pos:usize = 0;
         
@@ -22,7 +23,7 @@ pub mod lexer {
             pos += 12;
         }
         else {
-            return Err(TokError::new("Must specify '#lang racket'", pos))
+            return Err(TokError::new("Must specify '#lang racket'", pos as i32))
         }
 
         while pos < text.len(){
@@ -41,6 +42,10 @@ pub mod lexer {
                 toks.push(TIf);
                 pos += 2;
             }
+            else if &text[pos..(pos + 3)] == "let" {
+                toks.push(TLet);
+                pos += 3;
+            }
             else if let Some(i_match) = INT_RE.find(&text[pos..]) {
                 let v = i_match.as_str().parse::<i32>().unwrap();
                 toks.push(TInt(v));
@@ -56,16 +61,21 @@ pub mod lexer {
             }
             else if let Some(op1_match) = OP1_RE.find(&text[pos..]) { // Matches to op1
                 let op = op1_match.as_str().clone().trim_end();
-                toks.push(TOp1(String::from(op)));
+                toks.push(TOp1(op));
                 pos += op1_match.end()
             }
             else if let Some(op2_match) = OP2_RE.find(&text[pos..]) {
                 let op = op2_match.as_str().clone().trim_end();
-                toks.push(TOp2(String::from(op)));
+                toks.push(TOp2(op));
                 pos += op2_match.end()
             }
+            else if let Some(id_match) = ID_RE.find(&text[pos..]) {
+                let id = id_match.as_str();
+                toks.push(TID(id));
+                pos += id_match.end();
+            }
             else {
-                return Err(TokError::new("Could not parse", pos))
+                return Err(TokError::new("Could not parse", pos as i32))
             }
         }
 

@@ -8,8 +8,10 @@ pub mod tokens {
         TInt(i32),
         TBool(bool),
         TIf,
-        TOp1(String),
-        TOp2(String)
+        TOp1(&'static str),
+        TOp2(&'static str),
+        TLet,
+        TID(&'static str),
     }
 
     // Helpful display implementation for tokens

@@ -50,7 +50,8 @@ pub mod a86 {
         R9,
         R10,
         R11,
-        R12
+        R12,
+        Rsp
     }
 
     impl Value {
@@ -65,6 +66,7 @@ pub mod a86 {
                 Value::R10 => String::from("r10"),
                 Value::R11 => String::from("r11"),
                 Value::R12 => String::from("r12"),
+                Value::Rsp => String::from("rsp"),
             }
         }
     }

@@ -1,4 +1,6 @@
 #lang racket
-(if #f
-    #t
-    (+ 2 (sub1 (- 5 8))))
+(let ((wow 2))
+  (let ((wow2 (- 1 5)))
+    (+ wow (if #f 1 wow2))
+  )  
+)

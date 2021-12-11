@@ -14,7 +14,6 @@ use lexer::lexer::tokenize;
 use parser::parser::parse;
 use compiler::compiler::compile;
 
-// Wrote simple tests to see if lexer/parser are working
 fn main() {
     let mut args = env::args();
     let file = &args.nth(1).unwrap();
@@ -22,7 +21,7 @@ fn main() {
     let file_stem = p.file_stem().unwrap().to_str().unwrap();
     let path = format!("./{}.rkt", file_stem);
     let source = fs::read_to_string(path).expect("Unable to read file");
-    let tokens = tokenize(source);
+    let tokens = tokenize(string_to_static_str(source));
     let parse = match tokens {
         Ok(mut toks) => parse(&mut toks),
         Err(err) => panic!("{}", err)
@@ -34,3 +33,8 @@ fn main() {
     let write_path = format!("./{}.s", file_stem);
     fs::write(write_path, asm.to_string()).expect("Unable to write file");
 }
+
+fn string_to_static_str(s: String) -> &'static str {
+    Box::leak(s.into_boxed_str())
+}
+

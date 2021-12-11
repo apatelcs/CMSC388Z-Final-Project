@@ -1,5 +1,7 @@
 // Defines the Abstract Syntax Tree for MiniRacket
 
+
+
 pub mod ast {
     // type Expr = Int (i32)
     #[derive(Debug)]
@@ -7,8 +9,10 @@ pub mod ast {
         Int(i32),
         Bool(bool),
         If(Box<Expr>, Box<Expr>, Box<Expr>),
-        Prim1(String, Box<Expr>),
-        Prim2(String, Box<Expr>, Box<Expr>)
+        Prim1(&'static str, Box<Expr>),
+        Prim2(&'static str, Box<Expr>, Box<Expr>),
+        Let(&'static str, Box<Expr>, Box<Expr>),
+        Var(&'static str),
     }
 
     // Helpful display implementation for expressions
