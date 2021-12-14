@@ -73,12 +73,11 @@ Our goal for this project was to create a compiler written in Rust for a subset 
 ---
 
 ## **Challenges and Surprises**
-One aspect that made this project much more difficult was tokenizing and especially parsing our MiniRacket source code. Suprisingly, in most cases, handling the parsing was more difficult than writing the compiler code for a feature.
+One aspect that made this project much more difficult was tokenizing and especially parsing our MiniRacket source code. Suprisingly, in most cases, handling the parsing was more difficult than writing the compiler code for a feature. In CMSC430, our compiler was written in Racket, and the language had a built in feature for parsing raw source code into S-expressions, which were easier to parse. These S-expressions were nested data structures which could be matched to easily. This eliminated the need for ``lookahead()`` and ``match_token()`` and also completely eliminated the tokenizing process. Since Rust did not have this (or we couldn't find a crate to do this in time), we decided to write a lexer and parser from scratch which became very tedious.
 
-Another challenging aspect was creating a library that would allow us to combine together x86 instructions with ease.  
+Another challenging aspect was creating a library that would allow us to combine together x86 instructions with ease. If we had not written this library, our compiler would be performing many string manipulations since the output is a string containing x86 instructions. This way, we were able to create abstractions for each type of assembly instruction and enforce syntax for instruction types. Creating the library required a lot of planning because we needed a way to package multiple instructions together and a way to package sequences of instructions together to form assembly programs. 
 
 
 ---
 ## **Rust Observations**
-
-working with lifetimes sucks
+The first observation we made was the file system was odd in Rust. We decided that it would be best for our project to be divided up into multiple files since each file contained large chunks of code. We used the module system along with the ``use`` keyword to create links between files and import functions between files in our system. We also found interesting ways to use Rust I/O to read in and out from files to get the ``main.rs`` file to work with our runtime system to compile a file and produce the assembly instructions for some MiniRacket code. Finally, the robust type system in Rust proved very useful in our project along with the pattern matching because they provided ways for us to easily represent our AST, match expressions in our AST type, and build the entire compiler. We leveraged the type system to create representations for more robust errors and used built in types such as the ``Result`` and ``Option`` types to handle errors. Overall, Rust was a complicated but very useful language to work in, and once we layed out the foundation for our project, it was a very robust language for developing a compiler.
